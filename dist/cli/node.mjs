@@ -44,12 +44,18 @@ class RunebaseNode {
       this.cleanShutdown();
     });
   }
+  cleanShutdown() {
+    if (this.#shuttingDown) {
+      return;
+    }
+    this.#shuttingDown = true;
+    this.#node.stop();
+  }
   exitHandler({
     sigint
   }, err) {
-    if (sigint && !this.#shuttingDown) {
-      this.#shuttingDown = true;
-      this.#node.stop();
+    if (sigint) {
+      this.cleanShutdown();
     } else if (err) {
       let msg = err && err.message || '';
       let isRpcError = msg.includes('ECONNREFUSED') || msg.includes('ECONNRESET') || msg.includes('ETIMEDOUT') || msg.includes('socket hang up');
@@ -61,7 +67,7 @@ class RunebaseNode {
       if (err.stack) {
         this.logger.error(err.stack);
       }
-      this.#node.stop();
+      this.cleanShutdown();
     }
   }
   registerExitHandlers() {
