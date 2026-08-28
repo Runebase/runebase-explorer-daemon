@@ -33,7 +33,7 @@ class Chain {
 Chain.add({
   name: 'mainnet',
   type: 'mainnet',
-  port: 19001,
+  port: 9947,
   networkMagic: Buffer.from([0xcf, 0xf1, 0xd3, 0xa6]),
   pubkeyhash: 0x3D,
   privatekey: 0xd8,

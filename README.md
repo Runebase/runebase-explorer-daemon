@@ -11,16 +11,34 @@ runebase-explorer-daemon is split into 3 repos:
 
 ## Prerequisites
 
-- Node.js v12.0+
+- Node.js v22.12+ (v22.18+ to run the Babel build)
 - MySQL v8.0+
 - Redis v5.0+
-- Runebase Core (built with `-logevents=1`)
+- Runebase Core, either `runebased` or `runebase-qt`, running with `-logevents=1`
 
 ## Deploy Runebase Core
 
 1. `git clone --recursive https://github.com/runebase/runebase.git --branch=runebase-explorer-daemon`
 2. Follow the [build instructions](https://github.com/runebase/runebase/blob/master/README.md#building-runebase-core)
 3. Run `runebased` with `-logevents=1` enabled
+
+### Using runebase-qt instead of runebased
+
+The GUI wallet serves the same RPC and P2P interfaces, so the indexer can attach to a
+running `runebase-qt` — there is no need to start a separate `runebased`. Make sure
+`~/.runebase/runebase.conf` contains:
+
+```conf
+server=1
+logevents=1
+rpcuser=<your_rpc_user>
+rpcpassword=<your_rpc_password>
+```
+
+Restart the wallet after editing the config, then point `RPC_PORT` / `RPC_USER` /
+`RPC_PASS` at it and set `P2P_PORT` to the wallet's peer port (see the table below).
+`runebase-qt` accepts inbound P2P connections by default, so the indexer connects to it
+over `127.0.0.1` exactly as it would to `runebased`.
 
 ## Deploy runebase-explorer-daemon
 
@@ -61,15 +79,15 @@ DB_PASS=your_password
 DB_HOST=localhost
 DB_PORT=3306
 
-# RPC (Runebase Core)
+# RPC (Runebase Core: runebased or runebase-qt)
 RPC_PROTOCOL=http
 RPC_HOST=localhost
-RPC_PORT=9948
+RPC_PORT=9432
 RPC_USER=runebase_explorer
 RPC_PASS=runebase_explorer
 
-# P2P
-P2P_PORT=9433
+# P2P (the node's peer port)
+P2P_PORT=9947
 
 # Server (Socket.IO)
 SERVER_PORT=3001
@@ -114,10 +132,10 @@ pm2 start dist/index.mjs --name runebase-explorer-daemon --interpreter node --no
 | `DB_PORT` | `3306` | MySQL port |
 | `RPC_PROTOCOL` | `http` | Runebase Core RPC protocol |
 | `RPC_HOST` | `localhost` | Runebase Core RPC host |
-| `RPC_PORT` | `3889` | Runebase Core RPC port |
+| `RPC_PORT` | `9432` | Runebase Core RPC port (mainnet `9432`, testnet `19432`) |
 | `RPC_USER` | `user` | Runebase Core RPC username |
 | `RPC_PASS` | `password` | Runebase Core RPC password |
-| `P2P_PORT` | `9433` | Runebase Core P2P port |
+| `P2P_PORT` | `9947` | Runebase Core P2P port (mainnet `9947`, testnet `19947`) |
 | `SERVER_PORT` | `3001` | Socket.IO server port |
 
 ## Database Migrations
