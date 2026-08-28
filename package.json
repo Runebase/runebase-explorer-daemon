@@ -4,10 +4,13 @@
   "version": "0.1.4",
   "description": "Blockchain indexer for the Runebase network",
   "main": "src/index.mjs",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "build": "rm -rf dist && babel src --out-dir dist --copy-files --keep-file-extension",
     "start": "node --experimental-specifier-resolution=node dist/index.mjs start",
-    "dev": "nodemon --experimental-specifier-resolution=node --exec babel-node src/index.mjs start",
+    "dev": "nodemon --exec node src/index.mjs start",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "db:migrate": "sequelize-cli db:migrate",
@@ -33,26 +36,25 @@
   },
   "homepage": "https://github.com/runebase/runebase-explorer-daemon#readme",
   "devDependencies": {
-    "@babel/cli": "^7.28.6",
-    "@babel/core": "^7.29.0",
-    "@babel/node": "^7.29.0",
-    "@babel/preset-env": "^7.29.2",
+    "@babel/cli": "^8.0.4",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "eslint": "^10.2.0",
-    "globals": "^17.5.0",
+    "eslint": "^10.9.1",
+    "globals": "^17.11.0",
     "nodemon": "^3.1.14",
     "sequelize-cli": "^6.6.2"
   },
   "dependencies": {
     "colors": "^1.4.0",
-    "commander": "^14.0.3",
+    "commander": "^15.0.0",
     "dotenv": "^17.4.2",
     "ethereumjs-abi": "^0.6.8",
-    "lru-cache": "^11.3.5",
-    "mysql2": "^3.22.0",
-    "secp256k1": "^5.0.1",
+    "lru-cache": "^11.5.2",
+    "mysql2": "^3.24.2",
+    "secp256k1": "^5.0.2",
     "sequelize": "^6.37.8",
     "socket.io": "^4.8.1",
-    "uuid": "^13.0.0"
+    "uuid": "^14.0.2"
   }
 }
